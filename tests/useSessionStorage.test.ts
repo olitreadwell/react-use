@@ -74,6 +74,13 @@ describe(useSessionStorage, () => {
     expect(foo!.ok).toEqual('bar');
   });
 
+  it('falls back to initialValue when the stored value is not valid JSON', () => {
+    sessionStorage.setItem('foo', '{not valid json');
+    const { result } = renderHook(() => useSessionStorage('foo', 'bar'));
+    const [state] = result.current;
+    expect(state).toEqual('bar');
+  });
+
   describe('Options: raw', () => {
     it('does not JSON parse an existing raw value', () => {
       sessionStorage.setItem('foo', 'bar');
